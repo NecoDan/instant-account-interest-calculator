@@ -1,10 +1,11 @@
 create table if not exists account_manager.account_payable
 (
     id                           uuid                         not null,
-    name                         varchar(255)                 null,
+    name                         varchar(255)                 not null,
     value_origin                 decimal(19, 6) default 0     not null,
-    total_days_late              int                          null,
+    total_days_late              int                          not null,
     value_pay                    decimal(19, 6) default 0     not null,
+    value_corrected              decimal(19, 6) default 0     not null,
     dt_due                       timestamp      default now() not null,
     dt_pay                       timestamp      default now() not null,
     interest_calculation_rule_id serial                       not null,

@@ -1,4 +1,4 @@
-package br.com.deliverit.instant.account.interest.calculator.util;
+package br.com.deliverit.instant.account.interest.calculator.util.useful;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -10,7 +10,7 @@ import java.util.Objects;
 
 /**
  * @author Daniel Santos
- * {@link br.com.deliverit.instant.account.interest.calculator.util.DateUtil} classe útil que por motivação e finalidade múltiplas operações envolvendo datas sejam elas do tipo
+ * {@link DateUtil} classe útil que por motivação e finalidade múltiplas operações envolvendo datas sejam elas do tipo
  * {@link LocalDate}, {@link LocalDateTime}, {@link Date}, {@link Calendar}
  * @since 27/03/2021
  */

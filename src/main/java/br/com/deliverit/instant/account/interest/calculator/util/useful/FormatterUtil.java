@@ -1,4 +1,4 @@
-package br.com.deliverit.instant.account.interest.calculator.util;
+package br.com.deliverit.instant.account.interest.calculator.util.useful;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -8,7 +8,7 @@ import java.util.Objects;
 
 /**
  * @author Daniel Santos
- * {@link br.com.deliverit.instant.account.interest.calculator.util.FormatterUtil} classe útil que por motivação e finalidade múltiplas operações envolvendo formatações retornando
+ * {@link FormatterUtil} classe útil que por motivação e finalidade múltiplas operações envolvendo formatações retornando
  * o conteúdo em  {@link String}
  * @since 27/03/2021
  */
