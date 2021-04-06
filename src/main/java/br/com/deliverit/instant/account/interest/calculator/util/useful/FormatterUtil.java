@@ -1,5 +1,10 @@
 package br.com.deliverit.instant.account.interest.calculator.util.useful;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -53,6 +58,13 @@ public final class FormatterUtil {
         if (Objects.isNull(str) || str.isEmpty())
             return "";
         return str.replaceAll("[^\\d]", "");
+    }
+
+    public static String formatterContentJsonFrom(String conteudo) {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        JsonParser jp = new JsonParser();
+        JsonElement je = jp.parse(conteudo);
+        return gson.toJson(je);
     }
 }
 

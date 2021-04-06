@@ -67,8 +67,35 @@ public class AccountPayable extends AbstractEntity implements DaysCalculate {
     private InterestCalculationRule interestCalculationRule;
 
     public AccountPayable generateIdRandom() {
-        this.generateId();
+        generateId();
         return this;
+    }
+
+    public void generateTotalDaysLate() {
+        this.totalDaysLate = DaysCalculate.totalDaysOverdueBy(this.dueDate);
+    }
+
+    public boolean isOverdue() {
+        return (isValidTotalDaysLate() && this.totalDaysLate > 0);
+    }
+
+    public boolean isValidTotalDaysLate() {
+        return (Objects.nonNull(this.totalDaysLate));
+    }
+
+    public void calculateAssessment() {
+        if (Objects.isNull(this.interestCalculationRule)) {
+            throw new IllegalArgumentException("Error...");
+        }
+
+        InterestCalculator interestCalculator = InterestCalculator.builder()
+                .payValue(this.payValue)
+                .totalDaysLate(this.totalDaysLate)
+                .assessmentRate(this.interestCalculationRule.getPercentageAssessment())
+                .interestRate(this.interestCalculationRule.getPercentageInterest())
+                .build();
+
+        this.correctedValue = (isOverdue()) ? interestCalculator.calculateInterest() : this.payValue;
     }
 
     public boolean isOpening() {

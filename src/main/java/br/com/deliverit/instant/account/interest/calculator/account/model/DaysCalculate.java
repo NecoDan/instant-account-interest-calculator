@@ -1,5 +1,6 @@
 package br.com.deliverit.instant.account.interest.calculator.account.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
@@ -9,17 +10,17 @@ import java.util.Objects;
  */
 public interface DaysCalculate {
 
-    static Integer qtdeDiasPorIntervaloDatas(LocalDateTime valueDate1, LocalDateTime valueDate2) {
-        validarParamsIntervaloDatasInvalido(valueDate1, valueDate2);
-        return Math.toIntExact(ChronoUnit.DAYS.between(valueDate1, valueDate2));
+    static Integer totalDaysOverdueBy(LocalDateTime valueDate) {
+        validateDateRangeParameters(valueDate);
+        return Math.toIntExact(ChronoUnit.DAYS.between(valueDate.toLocalDate(), LocalDate.now()));
     }
 
-    static void validarParamsIntervaloDatasInvalido(LocalDateTime valueDate1, LocalDateTime valueDate2) {
-        if (isParamsIntervaloDatasInvalido(valueDate1, valueDate2))
-            throw new IllegalArgumentException("Parametros do intervalo de data(s) encontram-se inválida(s) e/ou inexistente(s).");
+    static void validateDateRangeParameters(LocalDateTime valueDate) {
+        if (isInvalidDateRangeParameters(valueDate))
+            throw new IllegalArgumentException("Date range parameters are invalid.ß");
     }
 
-    static boolean isParamsIntervaloDatasInvalido(LocalDateTime valueDate1, LocalDateTime valueDate2) {
-        return (Objects.isNull(valueDate1) || Objects.isNull(valueDate2));
+    static boolean isInvalidDateRangeParameters(LocalDateTime valueDate) {
+        return (Objects.isNull(valueDate));
     }
 }

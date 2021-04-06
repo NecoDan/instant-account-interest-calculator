@@ -25,4 +25,5 @@ public class InterestCalculationRuleService implements IInterestCalculationRuleS
     public List<InterestCalculationRule> findAll() {
         return this.interestCalculationRuleRepository.findAll();
     }
+
 }

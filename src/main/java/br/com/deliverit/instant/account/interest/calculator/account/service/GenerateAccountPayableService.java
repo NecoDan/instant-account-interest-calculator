@@ -4,6 +4,8 @@ package br.com.deliverit.instant.account.interest.calculator.account.service;
 import br.com.deliverit.instant.account.interest.calculator.account.dto.AccountPayableModel;
 import br.com.deliverit.instant.account.interest.calculator.account.exceptions.AccountPayableUnProcessableEntityException;
 import br.com.deliverit.instant.account.interest.calculator.account.model.AccountPayable;
+import br.com.deliverit.instant.account.interest.calculator.rule_calculation.enums.TypeAssessment;
+import br.com.deliverit.instant.account.interest.calculator.rule_calculation.factory.FactoryTypeAssessmentService;
 import br.com.deliverit.instant.account.interest.calculator.rule_calculation.model.InterestCalculationRule;
 import br.com.deliverit.instant.account.interest.calculator.rule_calculation.service.IInterestCalculationRuleService;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,7 @@ public class GenerateAccountPayableService implements IGenerateAccountPayableSer
 
     private final IAccountPayableService accountPayableService;
     private final IInterestCalculationRuleService interestCalculationRuleService;
+    private final FactoryTypeAssessmentService factoryTypeAssessmentService;
 
     @Override
     @Transactional(value = Transactional.TxType.NEVER)
@@ -34,18 +37,24 @@ public class GenerateAccountPayableService implements IGenerateAccountPayableSer
         validateParams(accountPayable);
         try {
             accountPayable.generateId();
-            accountPayable.setTotalDaysLate(2);
-            accountPayable.setPayValue(accountPayable.getOriginValue());
-            accountPayable.setCorrectedValue(accountPayable.getOriginValue());
-
-            Optional<InterestCalculationRule> interestCalculationRule = interestCalculationRuleService.findById(1L);
-            accountPayable.setInterestCalculationRule(interestCalculationRule
-                    .orElseThrow(() -> new AccountPayableUnProcessableEntityException("GenerateAccountPayableService - Error: Trying to create AccountPayable, interest calculation rule is invalid and/or nonexistent (null).")));
-
+            accountPayable.generateTotalDaysLate();
+            processInterestCalculationRuleBy(accountPayable);
             return this.accountPayableService.toAccountPayableModel(this.accountPayableService.save(accountPayable));
         } catch (Exception e) {
             throw new AccountPayableUnProcessableEntityException("GenerateVotingService - Error: Save AccountPayable.".concat(e.getMessage()));
         }
+    }
+
+    private void processInterestCalculationRuleBy(AccountPayable accountPayable) {
+        Optional<TypeAssessment> optionalTypeAssessment = this.factoryTypeAssessmentService.get(accountPayable);
+        Optional<InterestCalculationRule> optional = this.interestCalculationRuleService.findById((long) optionalTypeAssessment.get().getCode());
+
+        accountPayable.setInterestCalculationRule(optional
+                .orElseThrow(() ->
+                        new AccountPayableUnProcessableEntityException("GenerateAccountPayableService - Error: Trying to create AccountPayable, interest calculation rule is invalid and/or nonexistent (null)."))
+        );
+
+        accountPayable.calculateAssessment();
     }
 
     @Override

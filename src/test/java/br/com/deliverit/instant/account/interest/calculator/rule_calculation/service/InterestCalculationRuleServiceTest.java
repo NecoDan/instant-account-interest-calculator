@@ -1,8 +1,5 @@
 package br.com.deliverit.instant.account.interest.calculator.rule_calculation.service;
 
-import br.com.deliverit.instant.account.interest.calculator.account.model.AccountPayable;
-import br.com.deliverit.instant.account.interest.calculator.account.repository.AccountPayableRepository;
-import br.com.deliverit.instant.account.interest.calculator.account.service.AccountPayableService;
 import br.com.deliverit.instant.account.interest.calculator.rule_calculation.model.InterestCalculationRule;
 import br.com.deliverit.instant.account.interest.calculator.rule_calculation.repository.InterestCalculationRuleRepository;
 import br.com.deliverit.instant.account.interest.calculator.util.RandomUtil;
@@ -14,17 +11,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
-import org.modelmapper.ModelMapper;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.when;
 
 @Slf4j
 class InterestCalculationRuleServiceTest {

@@ -38,8 +38,8 @@ public class InterestCalculationRule implements Serializable {
     @Column(name = "operator")
     private String operator;
 
-    @Column(name = "percent_fine")
-    private BigDecimal percentageFine;
+    @Column(name = "percent_assessment")
+    private BigDecimal percentageAssessment;
 
     @Column(name = "percent_interest")
     private BigDecimal percentageInterest;
