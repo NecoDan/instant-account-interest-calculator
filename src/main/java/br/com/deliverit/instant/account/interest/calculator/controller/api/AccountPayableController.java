@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.*;
 import java.util.List;
 import java.util.UUID;
 
@@ -70,6 +71,12 @@ public class AccountPayableController {
     }
 
     private AccountPayable toAccountPayableFrom(AccountPayableRequest accountPayableRequest) {
-        return this.modelMapper.map(accountPayableRequest, AccountPayable.class);
+        AccountPayable accountPayable = this.modelMapper.map(accountPayableRequest, AccountPayable.class);
+
+        LocalTime utcTime = LocalTime.now(ZoneId.of("America/Sao_Paulo"));
+        accountPayable.setDueDate(LocalDateTime.of(accountPayableRequest.getDueDate(), utcTime));
+        accountPayable.setPayDay(LocalDateTime.of(accountPayableRequest.getPayDayDate(), utcTime));
+
+        return accountPayable;
     }
 }

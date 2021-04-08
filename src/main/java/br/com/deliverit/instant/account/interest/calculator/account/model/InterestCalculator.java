@@ -17,6 +17,7 @@ import java.util.Objects;
 public class InterestCalculator {
 
     private static final int TOTAL_DAYS_MONTH = 30;
+    private static final int DEFAULT_PERCENTAGE_VALUE = 100;
 
     private BigDecimal payValue;
     private BigDecimal interestRate;
@@ -29,7 +30,7 @@ public class InterestCalculator {
     }
 
     private double getLateInterestAmount() {
-        return BigDecimal.valueOf(getValueTotalDaysLate() / 100 * payValue.doubleValue()).doubleValue();
+        return BigDecimal.valueOf(getValueTotalDaysLate() / DEFAULT_PERCENTAGE_VALUE * payValue.doubleValue()).doubleValue();
     }
 
     private double getValueAssessment() {
@@ -37,22 +38,22 @@ public class InterestCalculator {
     }
 
     private double getValueInterestRatePerMonthOf() {
-        return (Objects.isNull(this.interestRate)) ? BigDecimal.ZERO.doubleValue() : perfomeCalculationValueInterestRatePerMonthOf();
+        return (Objects.isNull(this.interestRate)) ? BigDecimal.ZERO.doubleValue() : perfomCalculationValueInterestRatePerMonthOf();
     }
 
-    private double perfomeCalculationValueInterestRatePerMonthOf() {
-        return BigDecimal.valueOf((this.interestRate.doubleValue() / TOTAL_DAYS_MONTH) * 100).setScale(3, RoundingMode.HALF_DOWN).doubleValue();
+    private double perfomCalculationValueInterestRatePerMonthOf() {
+        return BigDecimal.valueOf((this.interestRate.doubleValue() / TOTAL_DAYS_MONTH) * DEFAULT_PERCENTAGE_VALUE).setScale(3, RoundingMode.HALF_DOWN).doubleValue();
     }
 
     private double getValueTotalDaysLate() {
-        return (Objects.isNull(this.totalDaysLate)) ? BigDecimal.ZERO.doubleValue() : perfomeCalculationValueTotalDaysLate();
+        return (Objects.isNull(this.totalDaysLate)) ? BigDecimal.ZERO.doubleValue() : perfomCalculationValueTotalDaysLate();
     }
 
-    private double perfomeCalculationValueTotalDaysLate() {
+    private double perfomCalculationValueTotalDaysLate() {
         return (getValueInterestRatePerMonthOf() * this.totalDaysLate.doubleValue());
     }
 
     public BigDecimal calculatePercentage(BigDecimal obtained, BigDecimal total) {
-        return BigDecimal.valueOf(obtained.doubleValue() / total.doubleValue() * 100);
+        return BigDecimal.valueOf(obtained.doubleValue() / total.doubleValue() * DEFAULT_PERCENTAGE_VALUE);
     }
 }

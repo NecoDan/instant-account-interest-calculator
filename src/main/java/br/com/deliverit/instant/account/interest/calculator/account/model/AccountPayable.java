@@ -1,5 +1,7 @@
 package br.com.deliverit.instant.account.interest.calculator.account.model;
 
+import br.com.deliverit.instant.account.interest.calculator.account.exceptions.AccountPayableUnProcessableEntityException;
+import br.com.deliverit.instant.account.interest.calculator.account.exceptions.InterestCalculationRuleNotFoundException;
 import br.com.deliverit.instant.account.interest.calculator.rule_calculation.model.InterestCalculationRule;
 import br.com.deliverit.instant.account.interest.calculator.util.domain.AbstractEntity;
 import lombok.Data;
@@ -34,25 +36,28 @@ public class AccountPayable extends AbstractEntity implements DaysCalculate {
         super();
     }
 
-    @NotBlank(message = "Insira uma name válido para a conta a ser cadastrada.")
-    @NotNull(message = "Insira uma name válido para a conta a ser cadastrada.")
+    @NotNull
     @Column(name = "name")
     private String name;
 
-    @Positive(message = "O número de control atrelado ao pedido informado deve ser positivo, ou seja, maior que zero (0)")
-    @DecimalMin(value = "1.0", inclusive = true)
+    @NotNull
     @Digits(integer = 19, fraction = 6)
     @Column(name = "value_origin")
-    private BigDecimal originValue;
+    private BigDecimal originValue = BigDecimal.ZERO;
 
+    @NotNull
     @Column(name = "total_days_late")
     private Integer totalDaysLate;
 
+    @NotNull
+    @Digits(integer = 19, fraction = 6)
     @Column(name = "value_pay")
-    private BigDecimal payValue;
+    private BigDecimal payValue = BigDecimal.ZERO;
 
+    @NotNull
+    @Digits(integer = 19, fraction = 6)
     @Column(name = "value_corrected")
-    private BigDecimal correctedValue;
+    private BigDecimal correctedValue = BigDecimal.ZERO;
 
     @NotNull
     @Column(name = "dt_due")
@@ -72,7 +77,10 @@ public class AccountPayable extends AbstractEntity implements DaysCalculate {
     }
 
     public void generateTotalDaysLate() {
-        this.totalDaysLate = DaysCalculate.totalDaysOverdueBy(this.dueDate);
+        if (isInvalidDatesParams()) {
+            throw new AccountPayableUnProcessableEntityException("Invalid date, payment date and / or due date parameters. Invalid and / or non-existent.");
+        }
+        this.totalDaysLate = (!isOpening()) ? BigDecimal.ZERO.intValue() : DaysCalculate.totalDaysOverdueBy(this.dueDate, this.payDay);
     }
 
     public boolean isOverdue() {
@@ -85,9 +93,10 @@ public class AccountPayable extends AbstractEntity implements DaysCalculate {
 
     public void calculateAssessment() {
         if (Objects.isNull(this.interestCalculationRule)) {
-            throw new IllegalArgumentException("Error...");
+            throw new InterestCalculationRuleNotFoundException("AccountPayable, error when calculating fine and interest for not finding calculation rule. Invalid and / or non-existent.");
         }
 
+        payValue = this.originValue;
         InterestCalculator interestCalculator = InterestCalculator.builder()
                 .payValue(this.payValue)
                 .totalDaysLate(this.totalDaysLate)

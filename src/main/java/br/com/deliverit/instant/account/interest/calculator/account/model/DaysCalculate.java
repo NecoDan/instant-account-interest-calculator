@@ -10,9 +10,9 @@ import java.util.Objects;
  */
 public interface DaysCalculate {
 
-    static Integer totalDaysOverdueBy(LocalDateTime valueDate) {
-        validateDateRangeParameters(valueDate);
-        return Math.toIntExact(ChronoUnit.DAYS.between(valueDate.toLocalDate(), LocalDate.now()));
+    static Integer totalDaysOverdueBy(LocalDateTime valueDueDate, LocalDateTime valuePayDay) {
+        validateDateRangeParameters(valueDueDate);
+        return Math.toIntExact(ChronoUnit.DAYS.between(valueDueDate.toLocalDate(), valuePayDay.toLocalDate()));
     }
 
     static void validateDateRangeParameters(LocalDateTime valueDate) {

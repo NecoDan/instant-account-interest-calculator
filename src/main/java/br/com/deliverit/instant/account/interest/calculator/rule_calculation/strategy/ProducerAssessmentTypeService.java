@@ -13,10 +13,10 @@ public abstract class ProducerAssessmentTypeService {
     }
 
     protected boolean isUntil(AccountPayable accountPayable, int totalDays) {
-        return (accountPayable.getTotalDaysLate() <= totalDays);
+        return (accountPayable.isOverdue() && accountPayable.getTotalDaysLate() <= totalDays);
     }
 
     protected boolean isOver(AccountPayable accountPayable, int totalDays) {
-        return (accountPayable.getTotalDaysLate() > totalDays);
+        return (accountPayable.isOverdue() && accountPayable.getTotalDaysLate() > totalDays);
     }
 }

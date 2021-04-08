@@ -16,6 +16,6 @@ public class ProducerAssessmentTypeFivePercentService extends ProducerAssessment
 
     @Override
     public TypeAssessment getTypeAssessmentFrom(AccountPayable accountPayable) {
-        return TypeAssessment.TWO_PERCENT;
+        return TypeAssessment.FIVE_PERCENT;
     }
 }
