@@ -3,7 +3,6 @@ package br.com.deliverit.instant.account.interest.calculator.account.dto;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 /**
  * @author Daniel Santos
@@ -19,5 +18,5 @@ public class AccountPayableModel {
     private BigDecimal originValue = BigDecimal.ZERO;
     private BigDecimal correctedValue = BigDecimal.ZERO;
     private Integer totalDaysLate;
-    private LocalDateTime payDay;
+    private String payDay;
 }

@@ -2,6 +2,7 @@ package br.com.deliverit.instant.account.interest.calculator.util;
 
 import br.com.deliverit.instant.account.interest.calculator.account.dto.AccountPayableModel;
 import br.com.deliverit.instant.account.interest.calculator.account.model.AccountPayable;
+import br.com.deliverit.instant.account.interest.calculator.util.useful.FormatterUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -33,7 +34,7 @@ public class AccountPayableCreator {
                 .correctedValue(accountPayable.getCorrectedValue())
                 .name(accountPayable.getName())
                 .originValue(accountPayable.getOriginValue())
-                .payDay(accountPayable.getPayDay())
+                .payDay(FormatterUtil.formatterLocalDateTimeBy(accountPayable.getPayDay()))
                 .totalDaysLate(accountPayable.getTotalDaysLate())
                 .build();
     }

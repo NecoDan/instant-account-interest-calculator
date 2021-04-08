@@ -30,8 +30,10 @@ class AccountPayableTest {
         log.info("{} ", "#TEST: testCalculateAssessment: ");
 
         // -- 01_Cenário
+        BigDecimal valueInput = BigDecimal.valueOf(150.0);
         this.accountPayable.setName(RandomUtil.generateIdentityNameRandom());
-        this.accountPayable.setPayValue(BigDecimal.valueOf(150.0));
+        this.accountPayable.setPayValue(valueInput);
+        this.accountPayable.setOriginValue(valueInput);
         this.accountPayable.setPayDay(LocalDateTime.of(LocalDate.of(2021, 4, 6), LocalTime.now()));
         this.accountPayable.setDueDate(LocalDateTime.of(LocalDate.of(2021, 3, 27), LocalTime.now()));
 
@@ -161,8 +163,10 @@ class AccountPayableTest {
         log.info("{} ", "#TEST: testCalculateAssessmentOverdueUpToThreeDays: ");
 
         // -- 01_Cenário
+        BigDecimal valueInput = BigDecimal.valueOf(415);
         this.accountPayable.setName(RandomUtil.generateIdentityNameRandom());
-        this.accountPayable.setPayValue(BigDecimal.valueOf(415));
+        this.accountPayable.setOriginValue(valueInput);
+        this.accountPayable.setPayValue(valueInput);
         this.accountPayable.setPayDay(LocalDateTime.now());
         this.accountPayable.setDueDate(LocalDateTime.now().minusDays(3));
 
@@ -190,6 +194,7 @@ class AccountPayableTest {
         // -- 01_Cenário
         this.accountPayable.setName(RandomUtil.generateIdentityNameRandom());
         this.accountPayable.setPayValue(BigDecimal.valueOf(580));
+        this.accountPayable.setOriginValue(BigDecimal.valueOf(580));
         this.accountPayable.setPayDay(LocalDateTime.now());
         this.accountPayable.setDueDate(LocalDateTime.now().minusDays(4));
 
@@ -217,6 +222,7 @@ class AccountPayableTest {
         // -- 01_Cenário
         this.accountPayable.setName(RandomUtil.generateIdentityNameRandom());
         this.accountPayable.setPayValue(BigDecimal.valueOf(200));
+        this.accountPayable.setOriginValue(BigDecimal.valueOf(200));
         this.accountPayable.setPayDay(LocalDateTime.now());
         this.accountPayable.setDueDate(LocalDateTime.now().minusDays(6));
 
