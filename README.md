@@ -32,7 +32,7 @@ A aplicaçao tem como objetivo disponibilizar endpoints para consulta de informa
 - Docker utilizando o compose;<br><br>
 
 #### Instruções inicialização e execução - (aplicação e database)
-###### Utilizando docker-compose com MongoDB:
+###### Utilizando docker-compose com PostgreSQL:
 Executar os comandos: <br><br>
 ```mvn clean install```<br>
 ```docker-compose build```<br>
