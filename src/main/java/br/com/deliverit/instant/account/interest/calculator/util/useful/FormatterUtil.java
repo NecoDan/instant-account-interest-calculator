@@ -55,9 +55,7 @@ public final class FormatterUtil {
     }
 
     public static String removeNonNumericCharacters(String str) {
-        if (Objects.isNull(str) || str.isEmpty())
-            return "";
-        return str.replaceAll("[^\\d]", "");
+        return (Objects.isNull(str) || str.isEmpty()) ? "" : str.replaceAll("[^\\d]", "");
     }
 
     public static String formatterContentJsonFrom(String conteudo) {

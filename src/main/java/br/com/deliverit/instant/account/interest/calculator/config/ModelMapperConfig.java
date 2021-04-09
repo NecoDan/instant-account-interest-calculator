@@ -33,7 +33,7 @@ public class ModelMapperConfig {
         return new ModelMapper();
     }
 
-    private static final Converter<LocalDateTime, String> LOCAL_DATE_TO_STRING_CONVERTER = mappingContext -> {
+    public static final Converter<LocalDateTime, String> LOCAL_DATE_TO_STRING_CONVERTER = mappingContext -> {
         LocalDateTime source = mappingContext.getSource();
         return FormatterUtil.formatterLocalDateTimeBy(source);
     };

@@ -2,6 +2,7 @@ package br.com.deliverit.instant.account.interest.calculator.account.service;
 
 
 import br.com.deliverit.instant.account.interest.calculator.account.dto.AccountPayableModel;
+import br.com.deliverit.instant.account.interest.calculator.account.dto.AccountPayableRequest;
 import br.com.deliverit.instant.account.interest.calculator.account.exceptions.AccountPayableUnProcessableEntityException;
 import br.com.deliverit.instant.account.interest.calculator.account.model.AccountPayable;
 import br.com.deliverit.instant.account.interest.calculator.rule_calculation.enums.TypeAssessment;
@@ -10,11 +11,15 @@ import br.com.deliverit.instant.account.interest.calculator.rule_calculation.mod
 import br.com.deliverit.instant.account.interest.calculator.rule_calculation.service.IInterestCalculationRuleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -30,6 +35,7 @@ public class GenerateAccountPayableService implements IGenerateAccountPayableSer
     private final IAccountPayableService accountPayableService;
     private final IInterestCalculationRuleService interestCalculationRuleService;
     private final FactoryTypeAssessmentService factoryTypeAssessmentService;
+    private final ModelMapper modelMapper;
 
     @Override
     @Transactional(value = Transactional.TxType.NEVER)
@@ -55,6 +61,17 @@ public class GenerateAccountPayableService implements IGenerateAccountPayableSer
         );
 
         accountPayable.calculateAssessment();
+    }
+
+    @Override
+    public AccountPayable toAccountPayableFrom(AccountPayableRequest accountPayableRequest) {
+        AccountPayable accountPayable = this.modelMapper.map(accountPayableRequest, AccountPayable.class);
+
+        LocalTime utcTime = LocalTime.now(ZoneId.of("America/Sao_Paulo"));
+        accountPayable.setDueDate(LocalDateTime.of(accountPayableRequest.getDueDate(), utcTime));
+        accountPayable.setPayDay(LocalDateTime.of(accountPayableRequest.getPayDayDate(), utcTime));
+
+        return accountPayable;
     }
 
     @Override

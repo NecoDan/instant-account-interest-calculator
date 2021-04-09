@@ -3,13 +3,11 @@ package br.com.deliverit.instant.account.interest.calculator.controller.api;
 import br.com.deliverit.instant.account.interest.calculator.account.dto.AccountPayableModel;
 import br.com.deliverit.instant.account.interest.calculator.account.dto.AccountPayableRequest;
 import br.com.deliverit.instant.account.interest.calculator.account.exceptions.AccountPayableNotFoundException;
-import br.com.deliverit.instant.account.interest.calculator.account.model.AccountPayable;
 import br.com.deliverit.instant.account.interest.calculator.account.service.IGenerateAccountPayableService;
 import br.com.deliverit.instant.account.interest.calculator.account.service.IReportAccountPayableService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -19,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.*;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,7 +31,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AccountPayableController {
 
-    private final ModelMapper modelMapper;
     private final IGenerateAccountPayableService generateAccountPayableService;
     private final IReportAccountPayableService reportAccountPayableService;
 
@@ -67,16 +63,6 @@ public class AccountPayableController {
     @ApiOperation(value = "Performs the vote on the specified account payable.", tags = "accounts")
     @PostMapping
     public ResponseEntity<AccountPayableModel> save(@Valid @RequestBody AccountPayableRequest accountPayableRequest) {
-        return new ResponseEntity<>(generateAccountPayableService.create(toAccountPayableFrom(accountPayableRequest)), HttpStatus.CREATED);
-    }
-
-    private AccountPayable toAccountPayableFrom(AccountPayableRequest accountPayableRequest) {
-        AccountPayable accountPayable = this.modelMapper.map(accountPayableRequest, AccountPayable.class);
-
-        LocalTime utcTime = LocalTime.now(ZoneId.of("America/Sao_Paulo"));
-        accountPayable.setDueDate(LocalDateTime.of(accountPayableRequest.getDueDate(), utcTime));
-        accountPayable.setPayDay(LocalDateTime.of(accountPayableRequest.getPayDayDate(), utcTime));
-
-        return accountPayable;
+        return new ResponseEntity<>(generateAccountPayableService.create(generateAccountPayableService.toAccountPayableFrom(accountPayableRequest)), HttpStatus.CREATED);
     }
 }

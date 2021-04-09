@@ -15,4 +15,12 @@ class GenerateAccountPayableServiceTest {
     @Test
     void testValidateParams() {
     }
+
+    @Test
+    void create() {
+    }
+
+    @Test
+    void validateParams() {
+    }
 }
