@@ -6,19 +6,27 @@ import br.com.deliverit.instant.account.interest.calculator.account.model.Accoun
 import br.com.deliverit.instant.account.interest.calculator.config.ModelMapperConfig;
 import br.com.deliverit.instant.account.interest.calculator.rule_calculation.model.InterestCalculationRule;
 import br.com.deliverit.instant.account.interest.calculator.util.useful.FormatterUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
+@Slf4j
 public class AccountPayableCreator {
 
     public static AccountPayable getAccountPayable() {
@@ -78,5 +86,15 @@ public class AccountPayableCreator {
         );
 
         return new ModelMapper();
+    }
+
+    public static void toStringEnd(ResultActions response) throws Exception {
+        if (Objects.isNull(response)) {
+            log.info("#TEST_RESULT: ".concat("Error generating output. There is no data..."));
+            return;
+        }
+
+        String result = response.andReturn().getResponse().getContentAsString();
+        log.info("#TEST_RESULT: ".concat(FormatterUtil.formatterContentJsonFrom(result)));
     }
 }

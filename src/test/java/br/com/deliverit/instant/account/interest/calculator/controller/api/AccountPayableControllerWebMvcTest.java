@@ -64,7 +64,8 @@ public class AccountPayableControllerWebMvcTest {
     private ObjectMapper objectMapper;
 
     @Before
-    public void setUp() throws Exception {
+    @SneakyThrows
+    public void setUp() {
         this.modelMapperFinal = AccountPayableCreator.getInicializeModelMapper();
         this.objectMapper = AccountPayableCreator.getInicializeObjectMapper();
     }
@@ -101,7 +102,7 @@ public class AccountPayableControllerWebMvcTest {
                 .andExpect(jsonPath("$.[*].totalDaysLate").isNotEmpty());
 
         assertNotNull(response.andReturn().getResponse().getContentAsString());
-        toStringEnd(response);
+        AccountPayableCreator.toStringEnd(response);
     }
 
     @Test
@@ -146,7 +147,7 @@ public class AccountPayableControllerWebMvcTest {
                 .andExpect(jsonPath("$.size").value(sizePageable));
 
         assertNotNull(response.andReturn().getResponse().getContentAsString());
-        toStringEnd(response);
+        AccountPayableCreator.toStringEnd(response);
     }
 
     @Test
@@ -184,7 +185,7 @@ public class AccountPayableControllerWebMvcTest {
                 .andExpect(jsonPath("$.totalDaysLate").value(accountPayableModel.getTotalDaysLate()));
 
         assertNotNull(response.andReturn().getResponse().getContentAsString());
-        toStringEnd(response);
+        AccountPayableCreator.toStringEnd(response);
     }
 
     @Test
@@ -246,29 +247,14 @@ public class AccountPayableControllerWebMvcTest {
 
         String statusResponse = String.valueOf(response.andReturn().getResponse().getStatus());
         log.info("#TEST_RESULT_STATUS: ".concat((statusResponse.isEmpty()) ? " " : HttpStatus.valueOf(Integer.parseInt(statusResponse)).toString()));
-        toStringEnd(response);
+        AccountPayableCreator.toStringEnd(response);
     }
 
     private ResultActions getResponseEntityEndPointsMethodGET(String url, MediaType mediaType) throws Exception {
         return this.mockMvc.perform(get(url).accept(mediaType));
     }
 
-    private String getJsonValueAccountPayableFrom(AccountPayable accountPayable) throws JsonProcessingException {
-        return this.objectMapper.writeValueAsString(accountPayable);
-    }
-
     private String getJsonValueAccountPayableRequestFrom(AccountPayableRequest accountPayableRequest) throws JsonProcessingException {
         return this.objectMapper.writeValueAsString(accountPayableRequest);
-    }
-
-    private void toStringEnd(ResultActions response) throws Exception {
-        if (Objects.isNull(response)) {
-            log.info("#TEST_RESULT: ".concat("Error generating output. There is no data..."));
-            return;
-        }
-
-        String result = response.andReturn().getResponse().getContentAsString();
-        String out = FormatterUtil.formatterContentJsonFrom(result);
-        log.info("#TEST_RESULT: ".concat(out));
     }
 }
